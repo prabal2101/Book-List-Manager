@@ -1,0 +1,316 @@
+**Final Development Prompt: Library Book Tracker System with AI Chatbot (Optimized & Scalable)**
+
+Build a full-stack web application named **“Library Book Tracker System with AI Chatbot Integration”** with a focus on scalability, performance, clean UI, and real-world usability.
+
+---
+
+## 1. Objective
+
+Develop a smart digital library system that allows users to manage books efficiently, locate them physically in the library, and interact with an AI chatbot for assistance.
+
+---
+
+## 2. Tech Stack
+
+* Frontend: React.js (preferred) or HTML/CSS/JavaScript
+* Backend: Node.js + Express.js
+* Database: MySQL
+* AI Chatbot: OpenAI API
+
+---
+
+## 3. Core Modules
+
+### 3.1 Authentication & Authorization
+
+* JWT-based login/register
+* Role-based access (Student, Librarian, Admin)
+* Password hashing (bcrypt)
+
+---
+
+### 3.2 Book Management (Updated)
+
+Each book must include:
+
+* Title
+* Author
+* Subject
+* Branch (CSE, IT, Civil, Mechanical, Electrical)
+* Availability
+* Physical Location:
+
+  * Section
+  * Rack Number
+  * Row Number
+  * Shelf Number
+* ISBN (optional)
+
+❌ **Do NOT include:**
+
+* Book cover image
+* Image upload feature
+* Any image-related UI or database field
+
+---
+
+### 3.3 Branch-wise Categorization
+
+* Filter books by branch
+* Separate UI sections/tabs for each branch
+* Show popular books per branch
+
+---
+
+### 3.4 Physical Library Mapping
+
+* Display exact location:
+
+  * Section + Rack + Row + Shelf
+* Help users find books physically
+* Optional: grid-based visual layout
+
+---
+
+### 3.5 Smart Search & Filtering
+
+Search by:
+
+* Title
+* Author
+* Subject
+* Branch
+* Availability
+* ISBN
+
+Features:
+
+* Auto-suggestions (typeahead)
+* Optimized search queries
+
+---
+
+### 3.6 Borrow/Return + Due System
+
+* Borrow book (check availability)
+* Return book
+* Due date tracking
+* Optional: late fine calculation
+* Borrow history
+
+---
+
+### 3.7 AI Chatbot
+
+* Answer queries:
+
+  * “Suggest CSE books”
+  * “Where is DBMS book?”
+* Provide:
+
+  * Recommendations
+  * Location guidance
+  * Usage help
+
+---
+
+### 3.8 Admin Dashboard
+
+* Total books, users, borrowed books
+* Most borrowed books
+* Activity tracking
+
+---
+
+### 3.9 Recommendation System
+
+* Suggest books based on:
+
+  * Branch
+  * Popularity
+  * User history
+
+---
+
+### 3.10 Bulk Upload Feature (Important)
+
+* Upload CSV file to add multiple books
+* Validate data before inserting
+* Handle large datasets efficiently
+
+---
+
+## 4. Scalability & Performance (Very Important)
+
+System must support **1000+ books efficiently**
+
+### Implement:
+
+* Pagination:
+
+  * limit + offset
+  * Example: /books?page=1&limit=20
+* Database Indexing:
+
+  * title
+  * author
+  * branch
+* Optimized queries
+* Fast search performance
+
+---
+
+## 5. Database Schema
+
+### Users
+
+* user_id, name, email, password, role
+
+### Books
+
+* book_id, title, author, subject
+* branch
+* availability
+* section, rack_number, row_number, shelf_number
+* isbn
+
+### Borrow
+
+* borrow_id, user_id, book_id
+* borrow_date, return_date, due_date
+
+### Wishlist
+
+* wishlist_id, user_id, book_id
+
+---
+
+## 6. API Endpoints
+
+### Auth
+
+* POST /register
+* POST /login
+
+### Books
+
+* GET /books (with pagination & filters)
+* POST /books
+* PUT /books/:id
+* DELETE /books/:id
+* POST /books/bulk-upload (CSV)
+
+### Borrow
+
+* POST /borrow
+* POST /return
+
+### Wishlist
+
+* POST /wishlist
+* GET /wishlist
+
+### Chatbot
+
+* POST /chat
+
+---
+
+## 7. Frontend UI Requirements (White Minimal Theme)
+
+### Design Style:
+
+* White background
+* Light gray sections
+* Soft shadows
+* Clean card layout
+
+### Accent Colors:
+
+* Light blue
+* Teal
+* Soft gray
+
+### UI Features:
+
+* Minimalistic design
+* Proper spacing & alignment
+* Smooth hover effects
+* Fully responsive (mobile + desktop)
+
+### Pages:
+
+* Login/Register
+* Dashboard (role-based)
+* Book listing with filters
+* Admin panel
+* Chatbot interface
+
+---
+
+## 8. Backend Requirements
+
+* RESTful APIs
+* JWT middleware
+* Input validation
+* Error handling
+* Modular architecture
+
+---
+
+## 9. Folder Structure
+
+/backend
+controllers/
+routes/
+models/
+middleware/
+config/
+server.js
+
+/frontend
+components/
+pages/
+services/
+styles/
+
+---
+
+## 10. Key Highlights
+
+* No image handling (clean & lightweight)
+* Supports large datasets (1000+ books)
+* Fast and optimized search
+* Physical library tracking
+* AI-powered chatbot
+* Modern minimal UI
+
+---
+
+## 11. Output Required
+
+* Fully working frontend + backend
+* MySQL database
+* Chatbot integration
+* Clean, optimized, scalable code
+
+---
+
+## 12. Setup Instructions
+
+* npm install
+* Configure .env (DB + API keys)
+* Run servers
+* Import SQL schema
+* Test bulk upload
+
+---
+
+## 13. Final Goal
+
+Build a **fast, scalable, and intelligent library system** that combines:
+
+* Digital book management
+* Physical library navigation
+* AI assistance
+  with a clean and minimal user experience.

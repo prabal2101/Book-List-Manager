@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/auth";
 import { Redirect } from "wouter";
-import { useGetActiveBorrows, useGetWishlist, getGetActiveBorrowsQueryKey, getGetWishlistQueryKey } from "@workspace/api-client-react";
+import { useGetBorrowHistory, useGetWishlist, getGetBorrowHistoryQueryKey, getGetWishlistQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Library, Clock, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
@@ -9,8 +9,8 @@ import { Link } from "wouter";
 export default function Dashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
   
-  const { data: activeBorrows } = useGetActiveBorrows({
-    query: { enabled: isAuthenticated, queryKey: getGetActiveBorrowsQueryKey() }
+  const { data: borrowHistory } = useGetBorrowHistory(undefined, {
+    query: { enabled: isAuthenticated, queryKey: getGetBorrowHistoryQueryKey() }
   });
   
   const { data: wishlist } = useGetWishlist({
@@ -24,7 +24,8 @@ export default function Dashboard() {
   if (user?.role === "admin") return <Redirect to="/admin" />;
   if (user?.role === "librarian") return <Redirect to="/admin" />;
 
-  const overdueCount = activeBorrows?.filter(b => b.isOverdue).length || 0;
+  const activeBorrows = borrowHistory?.records?.filter(b => !b.returnDate) ?? [];
+  const overdueCount = activeBorrows.filter(b => b.isOverdue).length;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">

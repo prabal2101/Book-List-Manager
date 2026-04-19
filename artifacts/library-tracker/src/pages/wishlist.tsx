@@ -20,7 +20,7 @@ export default function Wishlist() {
   const borrowMutation = useBorrowBook();
 
   const handleRemove = (bookId: number) => {
-    removeMutation.mutate({ data: { bookId } }, {
+    removeMutation.mutate(bookId, {
       onSuccess: () => {
         toast({ title: "Removed from wishlist" });
         queryClient.invalidateQueries({ queryKey: getGetWishlistQueryKey() });
@@ -36,7 +36,7 @@ export default function Wishlist() {
       onSuccess: () => {
         toast({ title: "Book borrowed successfully" });
         // remove from wishlist after borrowing
-        removeMutation.mutate({ data: { bookId } });
+        removeMutation.mutate(bookId);
         queryClient.invalidateQueries({ queryKey: getGetWishlistQueryKey() });
       },
       onError: (err) => {
