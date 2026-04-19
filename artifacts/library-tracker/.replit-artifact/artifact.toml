@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Library Book Tracker"
+version = "1.0.0"
+id = "artifacts/library-tracker"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18721
+
+[services.development]
+run = "pnpm --filter @workspace/library-tracker run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/library-tracker", "run", "build" ]
+publicDir = "artifacts/library-tracker/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18721"
+BASE_PATH = "/"
