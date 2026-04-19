@@ -32,7 +32,7 @@ export default function Login() {
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     loginMutation.mutate({ data: values }, {
       onSuccess: (data) => {
-        login(data.token);
+        login(data.token, data.user as Parameters<typeof login>[1]);
         setLocation("/dashboard");
       },
       onError: (error) => {
