@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, boolean, pgEnum, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -11,6 +11,8 @@ export const booksTable = pgTable("books", {
   subject: text("subject").notNull(),
   branch: branchEnum("branch").notNull(),
   availability: boolean("availability").notNull().default(true),
+  totalCopies: integer("total_copies").notNull().default(1),
+  availableCopies: integer("available_copies").notNull().default(1),
   section: text("section").notNull(),
   rackNumber: text("rack_number").notNull(),
   rowNumber: text("row_number").notNull(),

@@ -70,10 +70,10 @@ export default function BookDetail() {
                 <Badge variant="outline" className="bg-gray-50 text-gray-600 font-normal">
                   {book.branch}
                 </Badge>
-                {book.availability ? (
+                {(book as any).availableCopies > 0 ? (
                   <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">Available</Badge>
                 ) : (
-                  <Badge variant="secondary" className="bg-gray-100 text-gray-800">Borrowed</Badge>
+                  <Badge variant="secondary" className="bg-gray-100 text-gray-800">All Copies Borrowed</Badge>
                 )}
               </div>
               <CardTitle className="text-3xl font-bold tracking-tight">{book.title}</CardTitle>
@@ -96,6 +96,38 @@ export default function BookDetail() {
                   </dd>
                 </div>
               </dl>
+
+              {/* Copies availability breakdown */}
+              <div className="mt-6 p-4 rounded-lg bg-gray-50 border border-gray-100">
+                <p className="text-sm font-medium text-muted-foreground mb-3">Copy Availability</p>
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="bg-white rounded-md p-3 border border-gray-100 shadow-sm">
+                    <div className="text-2xl font-bold text-foreground">{(book as any).totalCopies ?? 1}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Total Copies</div>
+                  </div>
+                  <div className="bg-white rounded-md p-3 border border-green-100 shadow-sm">
+                    <div className="text-2xl font-bold text-green-700">{(book as any).availableCopies ?? (book.availability ? 1 : 0)}</div>
+                    <div className="text-xs text-muted-foreground mt-1">Available</div>
+                  </div>
+                  <div className="bg-white rounded-md p-3 border border-gray-100 shadow-sm">
+                    <div className="text-2xl font-bold text-orange-600">
+                      {((book as any).totalCopies ?? 1) - ((book as any).availableCopies ?? (book.availability ? 1 : 0))}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">Borrowed</div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-primary rounded-full h-2 transition-all"
+                      style={{ width: `${Math.round(((book as any).availableCopies ?? 1) / ((book as any).totalCopies ?? 1) * 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1.5 text-right">
+                    Available: {(book as any).availableCopies ?? 1} / {(book as any).totalCopies ?? 1} copies
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -122,11 +154,11 @@ export default function BookDetail() {
             <CardFooter className="flex-col gap-3 pt-0">
               <Button 
                 className="w-full" 
-                variant={book.availability ? "default" : "secondary"}
-                disabled={!book.availability || user?.role !== "student"}
+                variant={(book as any).availableCopies > 0 ? "default" : "secondary"}
+                disabled={(book as any).availableCopies <= 0 || user?.role !== "student"}
                 onClick={handleBorrow}
               >
-                {book.availability ? "Borrow Book" : "Currently Unavailable"}
+                {(book as any).availableCopies > 0 ? "Borrow Book" : "All Copies Borrowed"}
               </Button>
               {user?.role === "student" && (
                 <Button variant="outline" className="w-full" onClick={handleWishlist}>

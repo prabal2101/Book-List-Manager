@@ -115,10 +115,14 @@ export default function Books() {
                     <Badge variant="outline" className="bg-gray-50 text-gray-600 font-normal">
                       {book.branch}
                     </Badge>
-                    {book.availability ? (
-                      <span className="w-2 h-2 rounded-full bg-green-500 mt-1.5" title="Available"></span>
+                    {(book as any).availableCopies > 0 ? (
+                      <span className="text-xs font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded">
+                        {(book as any).availableCopies}/{(book as any).totalCopies}
+                      </span>
                     ) : (
-                      <span className="w-2 h-2 rounded-full bg-gray-300 mt-1.5" title="Borrowed"></span>
+                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                        0/{(book as any).totalCopies}
+                      </span>
                     )}
                   </div>
                   <Link href={`/books/${book.id}`}>
@@ -137,11 +141,11 @@ export default function Books() {
                 <CardFooter className="p-5 pt-0 mt-auto flex gap-2">
                   <Button 
                     className="flex-1" 
-                    variant={book.availability ? "default" : "secondary"}
-                    disabled={!book.availability || user?.role !== "student"}
+                    variant={(book as any).availableCopies > 0 ? "default" : "secondary"}
+                    disabled={(book as any).availableCopies <= 0 || user?.role !== "student"}
                     onClick={() => handleBorrow(book.id)}
                   >
-                    {book.availability ? "Borrow" : "Unavailable"}
+                    {(book as any).availableCopies > 0 ? "Borrow" : "Unavailable"}
                   </Button>
                   {user?.role === "student" && (
                     <Button variant="outline" size="icon" onClick={() => handleWishlist(book.id)} className="shrink-0 border-gray-200 text-gray-600 hover:text-primary hover:border-primary/30">

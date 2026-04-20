@@ -21,6 +21,7 @@ const bookSchema = z.object({
   author: z.string().min(1, "Author is required"),
   subject: z.string().min(1, "Subject is required"),
   branch: z.enum(["CSE", "IT", "Civil", "Mechanical", "Electrical"]),
+  totalCopies: z.coerce.number().int().min(1, "Must have at least 1 copy").default(1),
   section: z.string().min(1, "Section is required"),
   rackNumber: z.string().min(1, "Rack is required"),
   rowNumber: z.string().min(1, "Row is required"),
@@ -51,7 +52,7 @@ export default function AdminBooks() {
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: "", author: "", subject: "", branch: "CSE", section: "", rackNumber: "", rowNumber: "", shelfNumber: "", isbn: ""
+      title: "", author: "", subject: "", branch: "CSE", totalCopies: 1, section: "", rackNumber: "", rowNumber: "", shelfNumber: "", isbn: ""
     }
   });
 
@@ -119,7 +120,8 @@ export default function AdminBooks() {
                 <DialogTitle>Bulk Upload Books</DialogTitle>
                 <DialogDescription>
                   Upload multiple books using CSV format.
-                  <br/>Format: <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">title,author,subject,branch,section,rackNumber,rowNumber,shelfNumber,isbn</code>
+                  <br/>Format: <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">title,author,subject,branch,section,rackNumber,rowNumber,shelfNumber,isbn,totalCopies</code>
+                  <br/><span className="text-xs text-muted-foreground">isbn and totalCopies are optional (defaults to 1 copy)</span>
                 </DialogDescription>
               </DialogHeader>
               <div className="py-4">
@@ -177,6 +179,13 @@ export default function AdminBooks() {
                     )}/>
                     <FormField control={form.control} name="isbn" render={({ field }) => (
                       <FormItem><FormLabel>ISBN (Optional)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
+                    )}/>
+                    <FormField control={form.control} name="totalCopies" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Total Copies</FormLabel>
+                        <FormControl><Input type="number" min="1" {...field} /></FormControl>
+                        <FormMessage/>
+                      </FormItem>
                     )}/>
                   </div>
                   
@@ -247,11 +256,16 @@ export default function AdminBooks() {
                       Sec:{book.section}, R:{book.rackNumber}, Rw:{book.rowNumber}
                     </TableCell>
                     <TableCell>
-                      {book.availability ? (
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-transparent">Available</Badge>
-                      ) : (
-                        <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-transparent">Borrowed</Badge>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {(book as any).availableCopies > 0 ? (
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-transparent w-fit">Available</Badge>
+                        ) : (
+                          <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-transparent w-fit">Borrowed</Badge>
+                        )}
+                        <span className="text-xs text-muted-foreground">
+                          {(book as any).availableCopies ?? 1}/{(book as any).totalCopies ?? 1} copies
+                        </span>
+                      </div>
                     </TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleDelete(book.id)}>

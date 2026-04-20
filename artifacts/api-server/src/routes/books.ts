@@ -152,9 +152,14 @@ router.post("/books", authenticate, requireRole("librarian", "admin"), async (re
     return;
   }
 
+  const totalCopies = (parsed.data as Record<string, unknown>).totalCopies as number ?? 1;
+  const availableCopies = totalCopies;
+
   const [book] = await db.insert(booksTable).values({
     ...parsed.data,
-    availability: parsed.data.availability ?? true,
+    totalCopies,
+    availableCopies,
+    availability: availableCopies > 0,
   }).returning();
 
   res.status(201).json(book);
@@ -181,7 +186,7 @@ router.post("/books/bulk-upload", authenticate, requireRole("librarian", "admin"
     if (!line) continue;
 
     const cols = line.split(",").map((c) => c.trim().replace(/^"|"$/g, ""));
-    const [title, author, subject, branch, section, rackNumber, rowNumber, shelfNumber, isbn] = cols;
+    const [title, author, subject, branch, section, rackNumber, rowNumber, shelfNumber, isbn, totalCopiesRaw] = cols;
 
     if (!title || !author || !subject || !branch || !section || !rackNumber || !rowNumber || !shelfNumber) {
       errors.push(`Row ${startIndex + i + 1}: Missing required fields`);
@@ -196,6 +201,8 @@ router.post("/books/bulk-upload", authenticate, requireRole("librarian", "admin"
       continue;
     }
 
+    const totalCopies = totalCopiesRaw ? Math.max(1, parseInt(totalCopiesRaw, 10) || 1) : 1;
+
     try {
       await db.insert(booksTable).values({
         title,
@@ -203,6 +210,8 @@ router.post("/books/bulk-upload", authenticate, requireRole("librarian", "admin"
         subject,
         branch: branch as "CSE" | "IT" | "Civil" | "Mechanical" | "Electrical",
         availability: true,
+        totalCopies,
+        availableCopies: totalCopies,
         section,
         rackNumber,
         rowNumber,

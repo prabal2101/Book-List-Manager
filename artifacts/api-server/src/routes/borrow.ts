@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq, and, isNull, desc, count } from "drizzle-orm";
+import { eq, and, isNull, desc, count, sql } from "drizzle-orm";
 import { db, borrowsTable, booksTable, usersTable } from "@workspace/db";
 import {
   BorrowBookBody,
@@ -45,8 +45,8 @@ router.post("/borrow", authenticate, async (req, res): Promise<void> => {
     return;
   }
 
-  if (!book.availability) {
-    res.status(400).json({ error: "Book is not available for borrowing" });
+  if (book.availableCopies <= 0) {
+    res.status(400).json({ error: "No copies available for borrowing" });
     return;
   }
 
@@ -67,9 +67,17 @@ router.post("/borrow", authenticate, async (req, res): Promise<void> => {
     dueDate,
   }).returning();
 
-  await db.update(booksTable).set({ availability: false }).where(eq(booksTable.id, bookId));
+  const newAvailable = book.availableCopies - 1;
+  await db.update(booksTable)
+    .set({
+      availableCopies: newAvailable,
+      availability: newAvailable > 0,
+    })
+    .where(eq(booksTable.id, bookId));
 
-  res.status(201).json(formatBorrowRecord(borrow, book, null));
+  const [updatedBook] = await db.select().from(booksTable).where(eq(booksTable.id, bookId));
+
+  res.status(201).json(formatBorrowRecord(borrow, updatedBook, null));
 });
 
 router.post("/borrow/return", authenticate, async (req, res): Promise<void> => {
@@ -103,11 +111,20 @@ router.post("/borrow/return", authenticate, async (req, res): Promise<void> => {
     .where(eq(borrowsTable.id, borrowId))
     .returning();
 
-  await db.update(booksTable).set({ availability: true }).where(eq(booksTable.id, borrow.bookId));
-
   const [book] = await db.select().from(booksTable).where(eq(booksTable.id, borrow.bookId));
+  if (book) {
+    const newAvailable = Math.min(book.availableCopies + 1, book.totalCopies);
+    await db.update(booksTable)
+      .set({
+        availableCopies: newAvailable,
+        availability: true,
+      })
+      .where(eq(booksTable.id, borrow.bookId));
+  }
 
-  res.json(formatBorrowRecord(updated, book, null));
+  const [updatedBook] = await db.select().from(booksTable).where(eq(booksTable.id, borrow.bookId));
+
+  res.json(formatBorrowRecord(updated, updatedBook, null));
 });
 
 router.get("/borrow", authenticate, async (req, res): Promise<void> => {
