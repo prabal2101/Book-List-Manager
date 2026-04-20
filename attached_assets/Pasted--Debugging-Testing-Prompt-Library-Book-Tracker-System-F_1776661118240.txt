@@ -1,0 +1,140 @@
+**Debugging & Testing Prompt: Library Book Tracker System (Full Validation & Auto-Fix)**
+
+You are an expert full-stack developer and QA engineer.
+
+Analyze the complete project **“Library Book Tracker System with AI Chatbot Integration”** and perform a full system validation, debugging, and optimization.
+
+---
+
+## 1. Error Detection & Fixing
+
+* Identify all errors in:
+
+  * Frontend code
+  * Backend APIs
+  * Database queries
+* Fix:
+
+  * Syntax errors
+  * Runtime errors
+  * Logical bugs
+  * API integration issues
+
+---
+
+## 2. Functional Testing (Must Verify)
+
+Check and ensure all features are working correctly:
+
+### Authentication
+
+* Register/Login works
+* JWT authentication is valid
+* Role-based access works
+
+### Book Management
+
+* Add / Update / Delete books
+* Branch-wise classification works
+* Physical location fields (section, rack, row, shelf) work
+
+### Search System
+
+* Search by title, author, subject, branch
+* Filters work correctly
+* Pagination works (limit + offset)
+
+### Borrow/Return System
+
+* Borrow only if available_copies > 0
+* Reduce available_copies on borrow
+* Increase available_copies on return
+* Due date logic works
+
+### Copies Feature
+
+* total_copies and available_copies update correctly
+* Prevent negative values
+* Correct display (e.g., "4 / 10 available")
+
+### Chatbot
+
+* API works correctly
+* Responds to queries
+* Handles errors gracefully
+
+### Admin Panel
+
+* User management works
+* Data stats display correctly
+
+### Bulk Upload
+
+* CSV upload works
+* Data validation handled
+* Large dataset handled efficiently
+
+---
+
+## 3. Performance Optimization
+
+* Optimize slow API calls
+* Add indexing for:
+
+  * title
+  * author
+  * branch
+* Improve query performance
+* Ensure system handles 1000+ records smoothly
+
+---
+
+## 4. UI/UX Validation
+
+* White minimal theme applied correctly
+* Responsive design works on mobile and desktop
+* Proper spacing, alignment, and hover effects
+* No broken UI components
+
+---
+
+## 5. Security Checks
+
+* Input validation (prevent SQL injection, invalid data)
+* Secure password hashing
+* Protected routes using JWT
+
+---
+
+## 6. Code Quality Improvements
+
+* Refactor messy code
+* Ensure modular structure
+* Remove unused code
+* Improve readability
+
+---
+
+## 7. Final Output Requirements
+
+* Provide corrected and optimized code
+* Highlight all fixes made
+* Ensure project runs without errors
+* Provide updated setup instructions if needed
+
+---
+
+## 8. Important Instruction
+
+If any feature is not working:
+
+* Identify the issue
+* Fix it completely
+* Re-test after fixing
+* Ensure no new bugs are introduced
+
+---
+
+## Goal
+
+Deliver a **fully working, bug-free, optimized, and production-ready project** where all features function correctly and efficiently.

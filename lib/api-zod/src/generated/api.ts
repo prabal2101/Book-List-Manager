@@ -115,6 +115,7 @@ export const CreateBookBody = zod.object({
   rowNumber: zod.string(),
   shelfNumber: zod.string(),
   isbn: zod.string().nullish(),
+  totalCopies: zod.number().int().min(1).optional(),
 });
 
 /**
@@ -222,6 +223,8 @@ export const UpdateBookBody = zod.object({
   rowNumber: zod.string().optional(),
   shelfNumber: zod.string().optional(),
   isbn: zod.string().nullish(),
+  totalCopies: zod.number().int().min(1).optional(),
+  availableCopies: zod.number().int().min(0).optional(),
 });
 
 export const UpdateBookResponse = zod.object({

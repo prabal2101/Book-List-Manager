@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, timestamp, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 import { usersTable } from "./users";
@@ -12,7 +12,11 @@ export const borrowsTable = pgTable("borrows", {
   dueDate: timestamp("due_date").notNull(),
   returnDate: timestamp("return_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("borrows_user_id_idx").on(table.userId),
+  index("borrows_book_id_idx").on(table.bookId),
+  index("borrows_return_date_idx").on(table.returnDate),
+]);
 
 export const insertBorrowSchema = createInsertSchema(borrowsTable).omit({ id: true, createdAt: true });
 export type InsertBorrow = z.infer<typeof insertBorrowSchema>;

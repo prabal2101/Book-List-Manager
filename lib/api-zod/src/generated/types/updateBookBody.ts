@@ -18,4 +18,6 @@ export interface UpdateBookBody {
   rowNumber?: string;
   shelfNumber?: string;
   isbn?: string | null;
+  totalCopies?: number;
+  availableCopies?: number;
 }

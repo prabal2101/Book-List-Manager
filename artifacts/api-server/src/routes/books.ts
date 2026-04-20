@@ -152,7 +152,7 @@ router.post("/books", authenticate, requireRole("librarian", "admin"), async (re
     return;
   }
 
-  const totalCopies = (parsed.data as Record<string, unknown>).totalCopies as number ?? 1;
+  const totalCopies = parsed.data.totalCopies ?? 1;
   const availableCopies = totalCopies;
 
   const [book] = await db.insert(booksTable).values({
@@ -242,8 +242,23 @@ router.put("/books/:id", authenticate, requireRole("librarian", "admin"), async 
     return;
   }
 
+  const updateData: Record<string, unknown> = { ...parsed.data };
+
+  if (parsed.data.totalCopies !== undefined || parsed.data.availableCopies !== undefined) {
+    const [current] = await db.select().from(booksTable).where(eq(booksTable.id, params.data.id));
+    if (current) {
+      const newTotal = parsed.data.totalCopies ?? current.totalCopies;
+      const newAvailable = parsed.data.availableCopies !== undefined
+        ? Math.min(parsed.data.availableCopies, newTotal)
+        : Math.min(current.availableCopies, newTotal);
+      updateData.totalCopies = newTotal;
+      updateData.availableCopies = newAvailable;
+      updateData.availability = newAvailable > 0;
+    }
+  }
+
   const [book] = await db.update(booksTable)
-    .set(parsed.data)
+    .set(updateData)
     .where(eq(booksTable.id, params.data.id))
     .returning();
 

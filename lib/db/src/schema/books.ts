@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp, boolean, pgEnum, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, boolean, pgEnum, integer, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -19,7 +19,13 @@ export const booksTable = pgTable("books", {
   shelfNumber: text("shelf_number").notNull(),
   isbn: text("isbn"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (table) => [
+  index("books_title_idx").on(table.title),
+  index("books_author_idx").on(table.author),
+  index("books_branch_idx").on(table.branch),
+  index("books_availability_idx").on(table.availability),
+  index("books_isbn_idx").on(table.isbn),
+]);
 
 export const insertBookSchema = createInsertSchema(booksTable).omit({ id: true, createdAt: true });
 export type InsertBook = z.infer<typeof insertBookSchema>;

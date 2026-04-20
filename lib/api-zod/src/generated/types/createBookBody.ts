@@ -18,4 +18,5 @@ export interface CreateBookBody {
   rowNumber: string;
   shelfNumber: string;
   isbn?: string | null;
+  totalCopies?: number;
 }
