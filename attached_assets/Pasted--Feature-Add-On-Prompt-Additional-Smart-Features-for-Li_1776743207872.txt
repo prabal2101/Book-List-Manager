@@ -1,0 +1,173 @@
+**Feature Add-On Prompt: Additional Smart Features for Library Book Tracker System**
+
+Enhance the existing **Library Book Tracker System with AI Chatbot** by implementing the following additional features. Ensure all features are fully functional and integrated with the current system.
+
+---
+
+## 1. Trending Books System
+
+### Requirements:
+
+* Track number of times each book is borrowed
+* Display:
+
+  * “Trending Books” section on dashboard
+  * Branch-wise trending books
+
+### Implementation:
+
+* Add field in Books table:
+
+  * borrow_count (INTEGER, default 0)
+* Increment borrow_count on each borrow
+
+---
+
+## 2. Book Reservation System
+
+### Requirements:
+
+* Allow users to reserve a book if no copies are available
+* Maintain a queue for reservations
+* Notify next user when book is returned
+
+### Database:
+
+Create table:
+
+* reservations (reservation_id, user_id, book_id, status, timestamp)
+
+### Logic:
+
+* If available_copies == 0 → allow reservation
+* On return:
+
+  * Assign book to next user in queue
+
+---
+
+## 3. Smart Alerts / Notifications (UI-Based)
+
+### Requirements:
+
+* Show alerts for:
+
+  * Upcoming due date
+  * Overdue books
+
+### Implementation:
+
+* Display alerts in dashboard
+* Highlight overdue books in red
+
+---
+
+## 4. Student Personal Dashboard
+
+### Requirements:
+
+* Show:
+
+  * Currently borrowed books
+  * Due dates
+  * Borrow history
+  * Reserved books
+
+### UI:
+
+* Create separate student dashboard page
+* Clean card-based layout
+
+---
+
+## 5. Book Rating & Review System
+
+### Requirements:
+
+* Users can:
+
+  * Rate books (1–5 stars)
+  * Write short reviews
+
+### Database:
+
+Create table:
+
+* reviews (review_id, user_id, book_id, rating, comment)
+
+### Display:
+
+* Show average rating per book
+* Show recent reviews
+
+---
+
+## 6. Difficulty Level Tag
+
+### Requirements:
+
+* Each book should have difficulty level:
+
+  * Beginner
+  * Intermediate
+  * Advanced
+
+### Database Update:
+
+* Add field in Books table:
+
+  * difficulty_level (ENUM)
+
+### UI:
+
+* Show badge on book card
+
+---
+
+## 7. Fine Preview System
+
+### Requirements:
+
+* Show estimated fine before returning late book
+
+### Logic:
+
+* Define fine rate (e.g., ₹5 per day)
+* Calculate:
+
+  * overdue_days × fine_rate
+
+### Display:
+
+* Show message:
+
+  * “Estimated Fine: ₹X”
+
+---
+
+## 8. Integration Rules
+
+* All features must:
+
+  * Work with existing authentication system
+  * Follow current database structure
+  * Be properly connected with borrow/return logic
+* Ensure no conflicts with existing modules
+
+---
+
+## 9. Testing & Validation
+
+* Verify:
+
+  * Reservation queue works correctly
+  * Ratings are stored and averaged properly
+  * Alerts trigger correctly
+  * Dashboard displays correct data
+  * Fine calculation is accurate
+
+---
+
+## Goal
+
+Enhance the system with **user-friendly, intelligent, and real-world features** that improve usability, engagement, and functionality.
