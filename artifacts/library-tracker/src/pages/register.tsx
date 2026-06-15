@@ -7,9 +7,9 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Book } from "lucide-react";
+import { Library, UserPlus, ShieldCheck, graduationCap, BookOpenCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const registerSchema = z.object({
@@ -48,96 +48,166 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 py-12">
-      <Card className="w-full max-w-md shadow-sm border-gray-200">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
-              <Book className="h-6 w-6 text-primary" />
+    <div className="min-h-screen w-full flex bg-[#f8fafc]">
+      {/* Left Panel: Thematic Info (Matches Login Panel) */}
+      <div className="hidden lg:flex lg:w-1/2 bg-white border-r border-slate-200 flex-col p-12 justify-between">
+        <div className="flex items-center gap-2 text-[#0d9488]">
+          <Library className="h-8 w-8" />
+          <span className="text-2xl font-bold tracking-tight">LibTrack</span>
+        </div>
+
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-4xl font-bold text-slate-900 leading-tight">
+              Start your <span className="text-[#0d9488]">reading journey</span> today.
+            </h2>
+            <p className="text-lg text-slate-500 max-w-md">
+              Create an account to begin tracking your collection and managing your library activity.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50">
+              <div className="h-10 w-10 rounded-lg bg-[#0d9488]/10 flex items-center justify-center text-[#0d9488]">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-slate-800">Secure Access</p>
+                <p className="text-sm text-slate-500">Your data is protected with industry standards.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50">
+              <div className="h-10 w-10 rounded-lg bg-[#0d9488]/10 flex items-center justify-center text-[#0d9488]">
+                <BookOpenCheck className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-slate-800">Role-Based Experience</p>
+                <p className="text-sm text-slate-500">Tailored views for Students and Librarians.</p>
+              </div>
             </div>
           </div>
-          <CardTitle className="text-2xl tracking-tight font-semibold">Create an account</CardTitle>
-          <CardDescription>Join the library tracking system</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="name@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Role</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="student">Student</SelectItem>
-                        <SelectItem value="librarian">Librarian</SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
-                {registerMutation.isPending ? "Creating account..." : "Create account"}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <div className="text-sm text-muted-foreground">
+        </div>
+
+        <div className="text-sm text-slate-400 italic">
+          "The journey of a thousand miles begins with a single page."
+        </div>
+      </div>
+
+      {/* Right Panel: Registration Form */}
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12 overflow-y-auto">
+        <div className="w-full max-w-[460px] space-y-8 py-8">
+          <div className="lg:hidden flex items-center gap-2 text-[#0d9488] mb-8">
+            <Library className="h-8 w-8" />
+            <span className="text-2xl font-bold tracking-tight">LibTrack</span>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-slate-900">Create Account</h1>
+            <p className="text-slate-500 text-lg">Join Nitin and the LibTrack community.</p>
+          </div>
+
+          <Card className="border-slate-200 shadow-xl shadow-slate-200/40 rounded-2xl">
+            <CardContent className="pt-8">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-slate-600">Full Name</FormLabel>
+                        <FormControl>
+                          <Input 
+                            className="h-11 border-slate-200 focus:border-[#0d9488] focus:ring-[#0d9488]/10 rounded-xl px-4" 
+                            placeholder="Name" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-slate-600">Email Address</FormLabel>
+                        <FormControl>
+                          <Input 
+                            className="h-11 border-slate-200 focus:border-[#0d9488] focus:ring-[#0d9488]/10 rounded-xl px-4" 
+                            placeholder="example@gmail.com" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-slate-600">Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            className="h-11 border-slate-200 focus:border-[#0d9488] focus:ring-[#0d9488]/10 rounded-xl px-4" 
+                            type="password" 
+                            placeholder="••••••••" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-slate-600">Account Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 border-slate-200 focus:ring-[#0d9488]/10 rounded-xl px-4">
+                              <SelectValue placeholder="Select a role" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="rounded-xl">
+                            <SelectItem value="student" className="rounded-lg">Student</SelectItem>
+                            <SelectItem value="librarian" className="rounded-lg">Librarian</SelectItem>
+                            <SelectItem value="admin" className="rounded-lg">Admin</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold rounded-xl transition-all shadow-lg shadow-teal-500/20 mt-2" 
+                    disabled={registerMutation.isPending}
+                  >
+                    {registerMutation.isPending ? "Creating your space..." : "Register Now"}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+
+          <p className="text-center text-slate-600">
             Already have an account?{" "}
-            <Link href="/login" className="text-primary hover:underline font-medium">
+            <Link href="/login" className="text-[#0d9488] hover:underline font-semibold">
               Sign in
             </Link>
-          </div>
-        </CardFooter>
-      </Card>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

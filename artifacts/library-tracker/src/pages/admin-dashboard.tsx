@@ -19,7 +19,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Admin Dashboard</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Central Command: Library Administration</h1>
         <p className="text-muted-foreground mt-1">Overview of library operations and statistics</p>
       </div>
 
